@@ -137,6 +137,16 @@ func TestNodeGroupForNode(t *testing.T) {
 	mock.AssertExpectationsForObjects(t, gceManagerMock)
 }
 
+func TestNodeGroupForNodeWithNoProviderId(t *testing.T) {
+	gce := &GceCloudProvider{}
+	n := BuildTestNode("n1", 1000, 1000)
+	n.Spec.ProviderID = ""
+
+	nodeGroup, err := gce.NodeGroupForNode(n)
+	assert.NoError(t, err)
+	assert.Nil(t, nodeGroup)
+}
+
 func TestGetResourceLimiter(t *testing.T) {
 	gceManagerMock := &gceManagerMock{}
 	resourceLimiter := cloudprovider.NewResourceLimiter(
